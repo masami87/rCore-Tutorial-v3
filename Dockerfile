@@ -25,6 +25,12 @@ RUN set -x; \
     && ./configure --target-list=riscv64-softmmu,riscv64-linux-user \
     && make -j$(nproc) install \
     && cd $HOME && rm -rf qemu-5.0.0 qemu-5.0.0.tar.xz
+    
+    #install debug-tools
+    && wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz \
+    && tar zxvf riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz \
+    && mv riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14/bin/* /usr/bin/ \
+    && rm -rf riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14 riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz
 
 #for chinese network
 RUN set -x; \
