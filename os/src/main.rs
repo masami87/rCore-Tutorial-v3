@@ -4,9 +4,12 @@
 
 use core::arch::global_asm;
 
+use log::info;
+
 #[macro_use]
 mod console;
 mod lang_items;
+mod logging;
 mod sbi;
 
 global_asm!(include_str!("entry.asm"));
@@ -34,14 +37,17 @@ pub fn rust_main() -> ! {
         fn boot_stack_top();
     }
     clear_bss();
+
+    logging::init();
+
     println!("Hello, world!");
-    println!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
-    println!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
-    println!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
-    println!(
+    info!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
+    info!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
+    info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
+    info!(
         "boot_stack [{:#x}, {:#x})",
         boot_stack as usize, boot_stack_top as usize
     );
-    println!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
+    info!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
     panic!("Shutdown machine!");
 }
