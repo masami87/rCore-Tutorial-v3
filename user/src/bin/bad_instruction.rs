@@ -2,6 +2,8 @@
 #![no_main]
 #![feature(asm)]
 
+use core::arch::asm;
+
 extern crate user_lib;
 
 /// 由于 rustsbi 的问题，该程序无法正确退出

@@ -5,7 +5,7 @@
 #[macro_use]
 extern crate user_lib;
 extern crate core;
-use core::slice;
+use core::{arch::asm, slice};
 use user_lib::{write, STDOUT};
 
 /// 正确输出：
