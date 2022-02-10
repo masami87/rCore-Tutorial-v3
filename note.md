@@ -12,3 +12,5 @@
 
 任务切换必须是内核来做，因此就是当要切换任务时执行trap_handler，然后调用相关的内核功能`suspend_current_and_run_next`，
 该函数中调用了switch。
+
+TrapContext中保存的寄存器记录了应用陷入S特权级之前的CPU状态，而TaskContext则可以看成一个应用在S特权级进行Trap处理的过程中调用__switch之前的CPU状态。当恢复TaskContext之后会继续进行Trap处理，而__restore恢复TrapContext之后则是会回到用户态执行应用。
