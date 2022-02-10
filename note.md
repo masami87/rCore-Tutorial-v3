@@ -15,3 +15,7 @@
 
 TrapContext中保存的寄存器记录了应用陷入S特权级之前的CPU状态，而TaskContext则可以看成一个应用在S特权级进行Trap处理的过程中调用__switch之前的CPU状态。当恢复TaskContext之后会继续进行Trap处理，而__restore恢复TrapContext之后则是会回到用户态执行应用。
 另外，保存TrapContext之后进行Trap处理的时候，s0-s11寄存器可能会被覆盖，后面进行任务切换时这些寄存器会被保存到TaskContext中，也就是说这两个Context中的s0-s11也很可能是不同的。
+
+
+当实现了将TrapContext存入用户空间的次高地址后，每次陷入trap时寄存器sscratch 存放的就是当前用户空间中的
+TrapContext的地址，这个放置的动作是在__restore回该Trap流时完成的(main分支中的trap.S有注释)。

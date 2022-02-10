@@ -48,6 +48,7 @@ __restore:
     # switch to user space
     csrw satp, a1
     sfence.vma
+    # 将传入的 Trap 上下文位置保存在 sscratch 寄存器中，这样 __alltraps 中(13行)才能基于它将 Trap 上下文保存到正确的位置；
     csrw sscratch, a0
     mv sp, a0
     # now sp points to TrapContext in user space, start restoring based on it
