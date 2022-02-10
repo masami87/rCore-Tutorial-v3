@@ -2,6 +2,7 @@ use crate::trap::trap_return;
 
 #[repr(C)]
 pub struct TaskContext {
+    /// 它记录了 __switch 函数返回之后应该跳转到哪里继续执行
     ra: usize,
     sp: usize,
     s: [usize; 12],
