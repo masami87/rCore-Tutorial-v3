@@ -1,6 +1,7 @@
 use super::{get_block_cache, BlockDevice, BLOCK_SZ};
 use alloc::sync::Arc;
 
+/// 4096 bits
 type BitmapBlock = [u64; 64];
 
 const BLOCK_BITS: usize = BLOCK_SZ * 8;
@@ -25,6 +26,7 @@ impl Bitmap {
         }
     }
 
+    /// 返回从第一个data block开始的id序号
     pub fn alloc(&self, block_device: &Arc<dyn BlockDevice>) -> Option<usize> {
         for block_id in 0..self.blocks {
             let pos = get_block_cache(

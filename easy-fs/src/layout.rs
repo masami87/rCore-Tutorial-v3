@@ -15,7 +15,9 @@ const INDIRECT2_BOUND: usize = INDIRECT1_BOUND + INODE_INDIRECT2_COUNT;
 
 #[repr(C)]
 pub struct SuperBlock {
+    /// 验证文件系统合法性
     magic: u32,
+    /// 文件系统总块数
     pub total_blocks: u32,
     pub inode_bitmap_blocks: u32,
     pub inode_area_blocks: u32,
@@ -67,9 +69,12 @@ pub enum DiskInodeType {
 type IndirectBlock = [u32; BLOCK_SZ / 4];
 type DataBlock = [u8; BLOCK_SZ];
 
+/// 每个文件/目录在磁盘上均有一个 DiskInode 的形式存储
+/// 128 bytes
 #[repr(C)]
 pub struct DiskInode {
     pub size: u32,
+    /// 文件或目录的索引, 每个u32指向一个块编号
     pub direct: [u32; INODE_DIRECT_COUNT],
     pub indirect1: u32,
     pub indirect2: u32,
@@ -105,12 +110,13 @@ impl DiskInode {
         let mut total = data_blocks as usize;
         // indirect1
         if data_blocks > INODE_DIRECT_COUNT {
-            total += 1;
+            total += 1; // 新增一个一级索引，且一级索引只有一个
         }
         // indirect2
         if data_blocks > INDIRECT1_BOUND {
-            total += 1;
+            total += 1; // 新增一个二级索引块
             // sub indirect1
+            // 新增一级索引块的数量，注意这里的一级索引块编号不会保存在结构体里，而是二级索引专用的
             total +=
                 (data_blocks - INDIRECT1_BOUND + INODE_INDIRECT1_COUNT - 1) / INODE_INDIRECT1_COUNT;
         }
@@ -120,6 +126,7 @@ impl DiskInode {
         assert!(new_size >= self.size);
         Self::total_blocks(new_size) - Self::total_blocks(self.size)
     }
+    /// inner_id是内部顺序第几个块，然后去查询实际的块编号
     pub fn get_block_id(&self, inner_id: u32, block_device: &Arc<dyn BlockDevice>) -> u32 {
         let inner_id = inner_id as usize;
         if inner_id < INODE_DIRECT_COUNT {
@@ -373,6 +380,7 @@ impl DiskInode {
 #[repr(C)]
 pub struct DirEntry {
     name: [u8; NAME_LENGTH_LIMIT + 1],
+    /// inode_id，指明是第几个inode
     inode_number: u32,
 }
 

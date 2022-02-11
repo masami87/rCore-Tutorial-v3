@@ -7,6 +7,7 @@ use alloc::sync::Arc;
 use alloc::vec::Vec;
 use spin::{Mutex, MutexGuard};
 
+/// 放在内存中的记录文件索引节点信息的数据结构
 pub struct Inode {
     block_id: usize,
     block_offset: usize,
