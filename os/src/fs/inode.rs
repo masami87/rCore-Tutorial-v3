@@ -82,6 +82,7 @@ impl OpenFlags {
     }
 }
 
+/// NOTE: 打开的文件OSInode会被放在内核堆里
 pub fn open_file(name: &str, flags: OpenFlags) -> Option<Arc<OSInode>> {
     let (readable, writable) = flags.read_write();
     if flags.contains(OpenFlags::CREATE) {

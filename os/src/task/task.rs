@@ -28,7 +28,7 @@ pub struct TaskControlBlockInner {
     pub parent: Option<Weak<TaskControlBlock>>,
     pub children: Vec<Arc<TaskControlBlock>>,
     pub exit_code: i32,
-    pub fd_table: Vec<Option<Arc<dyn File + Send + Sync>>>,
+    pub fd_table: Vec<Option<Arc<dyn File + Send + Sync>>>, // 打开的文件会被放在内核堆里
     pub signals: SignalFlags,
 }
 
