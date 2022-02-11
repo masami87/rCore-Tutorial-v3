@@ -26,3 +26,8 @@ TrapContext的地址，这个放置的动作是在__restore回该Trap流时完�
 跳到trap_return，这里会获取切换后的TrapContext，并将它的地址作为参数放入a0中，接下来trap_return执行__restore，在__restore
 中会取这个地址，然后根据TrapContext的内容恢复寄存器状态，TrapContext中包含了spec寄存器，即sret之后要指令的地址，当trap结束
 后会跳到这个地址继续执行。
+
+任务a陷入trap，内核在执行__switch之前使用的是a的内核栈，这个内核栈是一个大的内核栈分出来得一部分，每个任务都有一个自己的内核栈。
+然后__switch后切换到的b的内核栈以及在trap中的状态，然后trap继续之前，并且恢复b的用户空间的TrapContext。如何找到b的TrapContext?
+这里是在trap_return中获取b当前任务的TrapContext的地址(保存在TaskControlBlock中)，然后把它作为参数放在a0中，然后在__restore中获取
+这个地址然后恢复用户进程状态。
