@@ -42,6 +42,7 @@ pub struct PipeRingBuffer {
     head: usize,
     tail: usize,
     status: RingBufferStatus,
+    /// 在某些情况下需要确认该管道所有的写端是否都已经被关闭了，通过这个字段很容易确认这一点。
     write_end: Option<Weak<Pipe>>,
 }
 

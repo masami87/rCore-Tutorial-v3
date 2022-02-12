@@ -195,6 +195,8 @@ pub fn translated_refmut<T>(token: usize, ptr: *mut T) -> &'static mut T {
         .get_mut()
 }
 
+/// 将我们调用 translated_byte_buffer 获得的包含多个切片的Vec
+/// 内核无法直接通过用户地址空间的虚拟地址来访问，因此需要进行封装
 pub struct UserBuffer {
     pub buffers: Vec<&'static mut [u8]>,
 }

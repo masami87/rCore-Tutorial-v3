@@ -70,6 +70,11 @@ pub fn sys_close(fd: usize) -> isize {
     0
 }
 
+/// 功能：为当前进程打开一个管道。
+/// 参数：pipe 表示应用地址空间中的一个长度为 2 的 usize 数组的起始地址，内核需要按顺序将管道读端
+/// 和写端的文件描述符写入到数组中。
+/// 返回值：如果出现了错误则返回 -1，否则返回 0 。可能的错误原因是：传入的地址不合法。
+/// syscall ID：59
 pub fn sys_pipe(pipe: *mut usize) -> isize {
     let task = current_task().unwrap();
     let token = current_user_token();

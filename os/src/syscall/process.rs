@@ -42,6 +42,9 @@ pub fn sys_fork() -> isize {
 }
 
 pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
+    // args 指向命令行参数字符串起始地址数组中的一个位置，
+    // 每次我们都可以从一个起始地址通过 translated_str 拿到一个字符串，
+    // 直到 args 为 0 就说明没有更多命令行参数了
     let token = current_user_token();
     let path = translated_str(token, path);
     let mut args_vec: Vec<String> = Vec::new();
